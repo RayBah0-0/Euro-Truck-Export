@@ -40,10 +40,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return typeof current === 'string' ? current : path;
   };
 
-  if (!mounted) {
-    return <>{children}</>;
-  }
-
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
