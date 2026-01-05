@@ -31,29 +31,46 @@ export const LanguagePopup = () => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center animate-fadeIn">
-      <div className="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4">
-        <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">
-          Select Your Language
-        </h2>
-        <p className="text-center text-gray-600 mb-6">
-          Choose your preferred language
-        </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => handleLanguageSelect(lang.code)}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
-                language === lang.code
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-blue-50 border border-gray-200'
-              }`}
-            >
-              <div className="text-2xl mb-1">{lang.flag}</div>
-              <div className="text-sm">{lang.name}</div>
-            </button>
-          ))}
+    <div className="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">Select language</h2>
+          <button
+            onClick={() => setShowPopup(false)}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+            aria-label="Close"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Language List */}
+        <div className="max-h-96 overflow-y-auto">
+          <ul className="divide-y divide-gray-100">
+            {languages.map((lang) => (
+              <li key={lang.code}>
+                <button
+                  onClick={() => handleLanguageSelect(lang.code)}
+                  className={`w-full px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors ${
+                    language === lang.code ? 'bg-blue-50' : ''
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-2xl w-8 h-8 flex items-center justify-center">{lang.flag}</span>
+                    <span className="text-base font-medium text-gray-900">{lang.name}</span>
+                  </span>
+                  {language === lang.code && (
+                    <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
