@@ -247,6 +247,29 @@ export default function TruckDetail() {
                   </motion.button>
                 ))}
               </div>
+              
+              {/* Videos Section */}
+              {truck.videos && truck.videos.length > 0 && (
+                <div className="p-4 bg-smoke-dark border-t border-charcoal-200">
+                  <h3 className="text-sm font-bold text-charcoal-700 uppercase tracking-wider mb-3">
+                    {t('truckDetail.videos') || 'Videos'}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {truck.videos.map((video, i) => (
+                      <div key={i} className="relative">
+                        <video 
+                          controls 
+                          className="w-full rounded-lg"
+                          preload="metadata"
+                        >
+                          <source src={video} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
 
             {/* Available Regions */}

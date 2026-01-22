@@ -14,6 +14,7 @@ export interface Truck {
   color: string;
   image: string;
   images: string[];
+  videos?: string[]; // Optional video URLs
   engine: string;
   transmission: string;
   axle: string;
@@ -50,6 +51,9 @@ export const TRUCKS: Truck[] = [
       'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/22_xcrnj5',
       'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/21_r3htgj',
       'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/37_xqgqcf',
+    ],
+    videos: [
+      'https://res.cloudinary.com/dqhesb1lq/video/upload/6v_c8wdiy.mp4',
     ],
     engine: 'Mercedes-Benz OM471 - 12.8L I6 Diesel - 450 HP (330 kW) - 2,200 Nm Torque',
     transmission: 'Mercedes PowerShift 3 - 12-speed Automated Manual with EcoRoll',
