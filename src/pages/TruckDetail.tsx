@@ -12,6 +12,12 @@ export default function TruckDetail() {
   const { t, language, isRTL } = useLanguage();
 
   const truck = getTruckById(Number(id));
+  
+  // Combine videos and images into one media array
+  const mediaItems = truck ? [
+    ...(truck.videos?.map(v => ({ type: 'video' as const, url: v })) || []),
+    ...truck.images.map(img => ({ type: 'image' as const, url: img }))
+  ] : [];
 
   useEffect(() => {
     if (truck) {
@@ -205,54 +211,50 @@ export default function TruckDetail() {
 
             {/* Image Gallery */}
             <motion.div variants={itemVariants} className="surface-panel rounded-3xl overflow-hidden">
-              {/* Videos Section - Show First */}
-              {truck.videos && truck.videos.length > 0 && (
-                <div className="p-6 bg-charcoal-900">
-                  <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-4">
-                    {t('truckDetail.videos') || 'Videos'}
-                  </h3>
-                  <div className="grid grid-cols-1 gap-4">
-                    {truck.videos.map((video, i) => (
-                      <div key={i} className="relative">
-                        <video 
-                          controls 
-                          className="w-full rounded-lg"
-                          preload="metadata"
-                          poster={truck.image}
-                        >
-                          <source src={video} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {/* Image Gallery */}
               <div className="relative bg-charcoal-900">
                 {/* Dark industrial overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 to-charcoal-900/20 z-10 pointer-events-none"></div>
                 
                 <AnimatePresence mode="wait">
-                  <motion.img
-                    key={selectedImage}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    src={truck.images[selectedImage]} 
-                    alt={`${truck.brand} ${truck.model}`}
-                    className="w-full aspect-[16/9] object-cover brightness-90 contrast-110 saturate-90"
-                  />
+                  {mediaItems[selectedImage]?.type === 'video' ? (
+                    <motion.div
+                      key={selectedImage}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full aspect-[16/9] bg-black flex items-center justify-center"
+                    >
+                      <video 
+                        controls 
+                        className="max-h-full max-w-full object-contain"
+                        preload="metadata"
+                        poster={truck.image}
+                      >
+                        <source src={mediaItems[selectedImage].url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </motion.div>
+                  ) : (
+                    <motion.img
+                      key={selectedImage}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      src={mediaItems[selectedImage]?.url} 
+                      alt={`${truck.brand} ${truck.model}`}
+                      className="w-full aspect-[16/9] object-cover brightness-90 contrast-110 saturate-90"
+                    />
+                  )}
                 </AnimatePresence>
                 <div className="absolute top-4 right-4 bg-charcoal-900/80 text-white px-3 py-1 rounded-full text-sm z-20">
-                  {selectedImage + 1} / {truck.images.length}
+                  {selectedImage + 1} / {mediaItems.length}
                 </div>
               </div>
               
               <div className="grid grid-cols-4 gap-2 p-4 bg-smoke-dark">
-                {truck.images.map((img, i) => (
+                {mediaItems.map((media, i) => (
                   <motion.button
                     key={i}
                     whileHover={{ scale: 1.05 }}
@@ -264,11 +266,27 @@ export default function TruckDetail() {
                         : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img 
-                      src={img} 
-                      alt={`View ${i+1}`}
-                      className="w-full aspect-[4/3] object-cover brightness-90 contrast-110 saturate-90"
-                    />
+                    {media.type === 'video' ? (
+                      <div className="w-full aspect-[4/3] bg-black flex items-center justify-center relative">
+                        <video 
+                          className="max-h-full max-w-full object-contain"
+                          preload="metadata"
+                        >
+                          <source src={media.url} type="video/mp4" />
+                        </video>
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                        </div>
+                      </div>
+                    ) : (
+                      <img 
+                        src={media.url} 
+                        alt={`View ${i+1}`}
+                        className="w-full aspect-[4/3] object-cover brightness-90 contrast-110 saturate-90"
+                      />
+                    )}
                   </motion.button>
                 ))}
               </div>
