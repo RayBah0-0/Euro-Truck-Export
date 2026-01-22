@@ -42,9 +42,8 @@ export const TRUCKS: Truck[] = [
     status: 'Available',
     location: 'Germany',
     color: 'White',
-    image: 'https://res.cloudinary.com/dqhesb1lq/image/upload/w_800,f_auto,q_auto/6v_c8wdiy',
+    image: 'https://res.cloudinary.com/dqhesb1lq/image/upload/w_800,f_auto,q_auto/35_uebtit',
     images: [
-      'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/6v_c8wdiy',
       'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/35_uebtit',
       'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/38_vmoyjd',
       'https://res.cloudinary.com/dqhesb1lq/image/upload/w_1200,f_auto,q_auto/39_eokazz',
