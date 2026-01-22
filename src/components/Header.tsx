@@ -1,21 +1,16 @@
 import { Link, NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
-import { useAuth } from '@/context/AuthContext';
 import { Language } from '@/lib/translations';
 import { getSavedTrucks, TruckBasic } from '@/lib/truckStorage';
 import { useEffect, useState } from 'react';
-import AuthModal from './AuthModal';
 
 export const Header = () => {
   const { language, setLanguage, t } = useLanguage();
-  const { currentUser, logout } = useAuth();
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [watchlistOpen, setWatchlistOpen] = useState(false);
   const [watchlist, setWatchlist] = useState<TruckBasic[]>([]);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const languages: { code: Language; name: string; short: string }[] = [
     { code: 'en', name: 'English', short: 'EN' },
@@ -82,43 +77,6 @@ export const Header = () => {
           </nav>
 
           <div className="flex items-center gap-3">
-            {currentUser ? (
-              <div className="relative">
-                <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="hidden sm:flex items-center gap-2 px-4 py-2.5 border-2 border-charcoal-200 text-xs text-charcoal-800 hover:border-mint-500 hover:bg-white rounded-full transition-all font-black uppercase tracking-[0.16em]"
-                >
-                  <div className="w-6 h-6 bg-mint-600 rounded-full flex items-center justify-center text-white text-xs font-black">
-                    {currentUser.displayName?.charAt(0) || currentUser.email?.charAt(0) || 'U'}
-                  </div>
-                  <span>{currentUser.displayName || 'Account'}</span>
-                </button>
-                {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border-2 border-charcoal-200 rounded-2xl shadow-[0_20px_40px_rgba(18,22,28,0.12)] z-50 overflow-hidden">
-                    <div className="px-4 py-3 border-b border-charcoal-100">
-                      <div className="text-sm font-semibold text-charcoal-900 truncate">{currentUser.displayName || 'User'}</div>
-                      <div className="text-xs text-charcoal-500 truncate">{currentUser.email}</div>
-                    </div>
-                    <button
-                      onClick={async () => {
-                        await logout();
-                        setShowUserMenu(false);
-                      }}
-                      className="w-full text-left px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={() => setAuthModalOpen(true)}
-                className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-charcoal-800 text-white text-xs font-black rounded-full hover:bg-charcoal-900 transition-all uppercase tracking-[0.18em]"
-              >
-                Sign In
-              </button>
-            )}
             {watchlist.length > 0 && (
               <div className="relative">
                 <button
@@ -276,7 +234,6 @@ export const Header = () => {
           </div>
         )}
       </div>
-      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </header>
   );
 };
